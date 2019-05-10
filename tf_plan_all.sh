@@ -70,7 +70,7 @@ run_terraform() {
     if [ "${RT_IS_BACKEND}" = true ]; then
         terraform init
     else
-        terraform init -backend-config=./backend.tfvars
+        terraform init -backend-config=../backend.tfvars
     fi
 
     if [ "${RT_IS_BACKEND}" = false ]; then
