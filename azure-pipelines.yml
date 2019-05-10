@@ -17,9 +17,9 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: 'az extension add -n azure-firewall'
 
-# - task: DownloadSecureFile@1
-#   inputs:
-#     secureFile: 'dev.tfvars'
+- task: DownloadSecureFile@1
+  inputs:
+   secureFile: 'dev.tfvars'
 
 - task: AzureCLI@1
   inputs:
