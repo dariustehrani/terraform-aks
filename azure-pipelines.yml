@@ -13,7 +13,7 @@ trigger:
 steps:
 - task: AzureCLI@1
   inputs:
-    azureSubscription: $(devops_subscription)
+    azureSubscription: '$(devops_subscription)'
     scriptLocation: 'inlineScript'
     inlineScript: 'az extension add -n azure-firewall'
 
@@ -23,8 +23,7 @@ steps:
 
 - task: AzureCLI@1
   inputs:
-    azureSubscription: $(devops_subscription)
-
+    azureSubscription: '$(devops_subscription)'
     scriptLocation: 'scriptPath'
     scriptPath: 'tf_validate_all.sh'
     arguments: '-e dev -p 4711 -v $(Agent.TempDirectory)/dev.tfvars -f'
