@@ -19,6 +19,6 @@ steps:
     azureSubscription: 'Darius-Azure Internal Consumption(a4ec924c-502f-4820-9549-1bbcce0dbb52)'
     scriptLocation: 'scriptPath'
     scriptPath: 'tf_validate_all.sh'
-    arguments: '-e dev -p 4711 -v darius.tfvars -f'
+    arguments: '-e dev -p 4711 -f'
     addSpnToEnvironment: true
     failOnStandardError: true
