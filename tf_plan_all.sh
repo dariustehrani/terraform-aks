@@ -93,15 +93,9 @@ run_terraform() {
     fi
 
     if [ "${f}" = true ]; then
-        terraform plan -out=terraform.tfplan -var-file=${RT_VAR_FILE_PATH} -var "prefix=${RT_PREFIX}" $(echo -n ${RT_VAR_FILE_SPECIAL_ARGS}) && terraform apply terraform.tfplan
+        terraform plan -var-file=${RT_VAR_FILE_PATH} -var "prefix=${RT_PREFIX}" $(echo -n ${RT_VAR_FILE_SPECIAL_ARGS})
     else
-        terraform plan -out=terraform.tfplan -var-file=${RT_VAR_FILE_PATH} -var "prefix=${RT_PREFIX}" $(echo -n ${RT_VAR_FILE_SPECIAL_ARGS})
-        read -p "Continue with terraform apply (y/n)? " CONT
-        if [ "$CONT" = "y" ]; then
-            terraform apply terraform.tfplan
-        else
-            exit 1
-        fi
+        terraform plan -var-file=${RT_VAR_FILE_PATH} -var "prefix=${RT_PREFIX}" $(echo -n ${RT_VAR_FILE_SPECIAL_ARGS})
     fi
     popd
 }
@@ -141,19 +135,16 @@ $DIR/check_env.sh
 VAR_FILE_PATH=$(get_abs_filename ${v})
 print_subription_context
 
-.log 6 "[==== 00 Terraform Backend State ====]"
+.log 6 "[==== 00 Validate: Terraform Backend State ====]"
 run_terraform true ${e} ${p} "00-tf-backend" ${VAR_FILE_PATH} ""
 
-.log 6 "[==== 01 Service Principals for AKS ====]"
-run_terraform false ${e} ${p} "01-env" ${VAR_FILE_PATH} ""
+.log 6 "[==== 02 Validate: AKS Resources ====]"
+run_terraform false ${e} ${p} "01-aks" ${VAR_FILE_PATH} ""
 
-.log 6 "[==== 02 AKS Resources ====]"
-run_terraform false ${e} ${p} "02-aks" ${VAR_FILE_PATH} "-var-file=./${e}_aks_cluster_sp.generated.tfvars"
-
-.log 6 "[==== 03 AKS Cluster: RBAC ====]"
+.log 6 "[==== 03 Validate: AKS Cluster: RBAC ====]"
 run_terraform false ${e} ${p} "03-aks-post-deploy" ${VAR_FILE_PATH} ""
 
-.log 6 "[==== 04 AKS Cluster: Ingress ====]"
-run_terraform false ${e} ${p} "04-aks-post-deploy-ingress" ${VAR_FILE_PATH} "-var-file=./${e}_firewall_config.generated.tfvars"
+.log 6 "[==== 04 Validate: AKS Cluster: Ingress ====]"
+run_terraform false ${e} ${p} "04-aks-post-deploy-ingress" ${VAR_FILE_PATH} ""
 
 .log 6 "[==== Done. ====]"

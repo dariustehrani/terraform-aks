@@ -1,3 +1,5 @@
+.helm
+.helm_dev
 *.tfvars
 *.generated.*
 *.tfplan
