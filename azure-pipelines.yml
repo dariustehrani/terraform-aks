@@ -9,3 +9,14 @@ pool:
 
 trigger:
 - master
+
+- task: DownloadSecureFile@1
+  inputs:
+    secureFile: 'dev.tfvars'
+
+- task: AzureCLI@1
+  inputs:
+    azureSubscription: 'aks-terraform'
+    scriptLocation: 'inlineScript'
+    inlineScript: 'az extension add -n azure-firewall'
+
