@@ -48,12 +48,10 @@ az storage container create --name tf-state
 ````
 see: https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-cli
 
-
+## Environment Management
 When all preconditions are met, you need to gather the required input variables in a file, e.g. `secrets.dev.tfvars`. The following variables are **mandatory** to provide:
 
 ```hcl
-aad_server_app_id="00000000-0000-0000-0000-000000000000"
-aad_server_app_secret="PatVMovW........WXJyV5fw="
 aad_client_app_id="00000000-0000-0000-0000-000000000000"
 aad_tenant_id="00000000-0000-0000-0000-000000000000"
 
@@ -87,8 +85,6 @@ The deployment structure is basically divided into two parts. The first part tak
 
     > Required Azure RBAC: Subscription *Owner*.
     > Requires that the executing entity has the Azure RBAC permission *Owner* on the target subscription.
-
------------
 
 - `03-aks-post-deploy`
 
