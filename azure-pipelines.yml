@@ -9,24 +9,3 @@ pool:
 
 trigger:
 - master
-
-steps:
-- task: AzureCLI@1
-  inputs:
-    azureSubscription: 'aks-terraform'
-    scriptLocation: 'inlineScript'
-    inlineScript: 'az extension add -n azure-firewall'
-
-- task: DownloadSecureFile@1
-  inputs:
-    secureFile: 'dev.tfvars'
-
-- task: AzureCLI@1
-  inputs:
-    azureSubscription: aks-terraform'
-    scriptLocation: 'scriptPath'
-    scriptPath: 'tf_validate_all.sh'
-    arguments: '-e dev -p 4711 -v $(Agent.TempDirectory)/dev.tfvars -f'
-    addSpnToEnvironment: true
-    failOnStandardError: true
-
