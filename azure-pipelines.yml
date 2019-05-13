@@ -41,3 +41,17 @@ steps:
     scriptPath: 'run_tf.sh'
     arguments: '-e dev -i $(Agent.TempDirectory)/dev.tfvars -v -f'
     addSpnToEnvironment: true
+
+
+- task: AzureCLI@1
+  name: "terraform_APPLY_DEV"
+  env:
+    __TF_AAD_CLIENT_APP_ID: $(__TF_aad_client_app_id)
+    __TF_AAD_TENANT_ID: $(__TF_aad_tenant_id)
+    __TF_STORAGE_ACCOUNT_PRIMARY_ACCESS_KEY: $(__TF_storage_account_primary_access_key)
+  inputs:
+    azureSubscription: 'aks-terraform'
+    scriptLocation: 'scriptPath'
+    scriptPath: 'run_tf.sh'
+    arguments: '-e dev -i $(Agent.TempDirectory)/dev.tfvars -f'
+    addSpnToEnvironment: true

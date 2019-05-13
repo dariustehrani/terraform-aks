@@ -218,7 +218,7 @@ run_terraform ${v} ${e} "01-aks" "${VAR_FILE_PATH}"
 run_terraform ${v} ${e} "03-aks-post-deploy" "${VAR_FILE_PATH}"
 
 .log 6 "[==== 04 Post Deploy Ingress ====]"
-run_terraform ${v} ${e} "04-post-deploy-ingress" "${VAR_FILE_PATH}"
+run_terraform ${v} ${e} "04-aks-post-deploy-ingress" "${VAR_FILE_PATH}"
 
 
 .log 6 "[==== Done. ====]"
