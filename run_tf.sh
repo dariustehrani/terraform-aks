@@ -114,8 +114,14 @@ ensure_terraform_backend() {
             exit 1
         fi
     fi
-
     BACKEND_CONFIG="$(terraform output -json | jq -r '.backend_config_params.value' | tr -d '\n')"
+    else    
+        if [ -z "${RT_VAR_FILE_PATH}" ]; then
+            eval $(printf "terraform validate %s" "${RT_VARS}")
+        else
+            eval $(printf "terraform validate -var-file %s %s" "${RT_VAR_FILE_PATH}" "${RT_VARS}")
+        fi
+    fi
 
     popd
 }
