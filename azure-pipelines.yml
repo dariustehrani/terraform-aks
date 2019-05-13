@@ -39,7 +39,7 @@ steps:
   inputs:
     azureSubscription: 'aks-terraform'
     scriptLocation: 'inlineScript'
-    inlineScript: 'az aks get-credentials --resource-group dev-${__TF_prefix}-aks-rg --name dev-${__TF_prefix}-aks --admin --overwrite-existing'
+    inlineScript: 'az aks get-credentials --resource-group dev-${__TF_PREFIX}-aks-rg --name dev-${__TF_PREFIX}-aks --admin --overwrite-existing'
 
 - task: AzureCLI@1
   name: "terraform_DRYRUN"
