@@ -19,18 +19,24 @@ steps:
   inputs:
     azureSubscription: 'aks-terraform'
     scriptLocation: 'inlineScript'
-    inlineScript: 'az extension add -n azure-firewall'
+    inlineScript: 'pwd && ls -las'
 
-- task: AzureCLI@1
-  env:
-    __TF_AAD_CLIENT_APP_ID: $(__TF_aad_client_app_id)
-    __TF_AAD_TENAND_ID: $(__TF_aad_tenant_id)
-    __TF_AKS_CLUSTER_ADMINS: $(__TF_aks_cluster_admins)
-    __TF_STORAGE_ACCOUNT_PRIMARY_ACCESS_KEY: $(__TF_storage_account_primary_access_key)
-  inputs:
-    azureSubscription: 'aks-terraform'
-    scriptLocation: 'scriptPath'
-    scriptPath: 'run_tf.sh'
-    arguments: '-e dev -i $(Agent.TempDirectory)/dev.tfvars -v -f'
-    addSpnToEnvironment: true
-    
+#- task: AzureCLI@1
+#  inputs:
+#    azureSubscription: 'aks-terraform'
+#    scriptLocation: 'inlineScript'
+#    inlineScript: 'az extension add -n azure-firewall'
+#
+#- task: AzureCLI@1
+#  env:
+#    __TF_AAD_CLIENT_APP_ID: $(__TF_aad_client_app_id)
+#    __TF_AAD_TENAND_ID: $(__TF_aad_tenant_id)
+#    __TF_AKS_CLUSTER_ADMINS: $(__TF_aks_cluster_admins)
+#    __TF_STORAGE_ACCOUNT_PRIMARY_ACCESS_KEY: $(__TF_storage_account_primary_access_key)
+#  inputs:
+#    azureSubscription: 'aks-terraform'
+#    scriptLocation: 'scriptPath'
+#    scriptPath: 'run_tf.sh'
+#    arguments: '-e dev -i $(Agent.TempDirectory)/dev.tfvars -v -f'
+#    addSpnToEnvironment: true
+#    
