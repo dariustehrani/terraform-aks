@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+set -x
 set -o errexit
 set -o nounset
 set -o pipefail
@@ -181,9 +182,9 @@ run_terraform() {
         fi
     else    
         if [ -z "${RT_VAR_FILE_PATH}" ]; then
-            eval $(printf "terraform validate %s" "${RT_VARS}")
+            eval $(printf "terraform validate %s" "${RT_VARS}" && pwd)
         else
-            eval $(printf "terraform validate -var-file %s %s" "${RT_VAR_FILE_PATH}" "${RT_VARS}")
+            eval $(printf "terraform validate -var-file %s %s" "${RT_VAR_FILE_PATH}" "${RT_VARS}" && pwd)
         fi
     fi
     popd
@@ -248,15 +249,15 @@ VAR_FILE_PATH=$(get_abs_filename "${i}")
 ensure_subription_context
 
 .log 6 "[==== 00 Ensure Terraform State Backend  ====]"
-ensure_terraform_backend "./00-tf-backend" "${VAR_FILE_PATH}"
+ensure_terraform_backend "00-tf-backend" "${VAR_FILE_PATH}"
 
 .log 6 "[==== 01 AKS ====]"
-run_terraform ${v} ${e} "./01-aks" "${VAR_FILE_PATH}"
+run_terraform ${v} ${e} "01-aks" "${VAR_FILE_PATH}"
 
 .log 6 "[==== 03 Post Deploy ====]"
-run_terraform ${v} ${e} "./03-aks-post-deploy" "${VAR_FILE_PATH}"
+run_terraform ${v} ${e} "03-aks-post-deploy" "${VAR_FILE_PATH}"
 
 .log 6 "[==== 04 Post Deploy Ingress ====]"
-run_terraform ${v} ${e} "./04-aks-post-deploy-ingress" "${VAR_FILE_PATH}"
+run_terraform ${v} ${e} "04-aks-post-deploy-ingress" "${VAR_FILE_PATH}"
 
 .log 6 "[==== Done. ====]"
