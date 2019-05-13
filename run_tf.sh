@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set -x
 set -o errexit
 set -o nounset
 set -o pipefail
@@ -182,9 +181,9 @@ run_terraform() {
         fi
     else    
         if [ -z "${RT_VAR_FILE_PATH}" ]; then
-            eval $(printf "terraform validate %s" "${RT_VARS}" && pwd)
+            eval $(printf "terraform validate %s" "${RT_VARS}")
         else
-            eval $(printf "terraform validate -var-file %s %s" "${RT_VAR_FILE_PATH}" "${RT_VARS}" && pwd)
+            eval $(printf "terraform validate -var-file %s %s" "${RT_VAR_FILE_PATH}" "${RT_VARS}")
         fi
     fi
     popd
@@ -251,13 +250,7 @@ ensure_subription_context
 .log 6 "[==== 00 Ensure Terraform State Backend  ====]"
 ensure_terraform_backend "00-tf-backend" "${VAR_FILE_PATH}"
 
-.log 6 "[==== 01 AKS ====]"
-run_terraform ${v} ${e} "01-aks" "${VAR_FILE_PATH}"
-
-.log 6 "[==== 03 Post Deploy ====]"
-run_terraform ${v} ${e} "03-aks-post-deploy" "${VAR_FILE_PATH}"
-
-.log 6 "[==== 04 Post Deploy Ingress ====]"
-run_terraform ${v} ${e} "04-aks-post-deploy-ingress" "${VAR_FILE_PATH}"
+.log 6 "[==== 01 Sample ====]"
+run_terraform ${v} ${e} "01-sample" "${VAR_FILE_PATH}"
 
 .log 6 "[==== Done. ====]"
