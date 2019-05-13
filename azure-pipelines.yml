@@ -27,10 +27,9 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: 'env'
 
-# - task: AzureCLI@1
-#   inputs:
-#     azureSubscription: 'aks-terraform'
-#     scriptLocation: 'scriptPath'
-#     scriptPath: 'tf_validate_all.sh'
-#     arguments: '-e dev -p 4711 -v $(Agent.TempDirectory)/dev.tfvars -f'
-
+- task: AzureCLI@1
+  inputs:
+    azureSubscription: 'aks-terraform'
+    scriptLocation: 'scriptPath'
+    scriptPath: 'tf_apply_all.1.sh'
+    arguments: '-e dev -p 4711 -i $(Agent.TempDirectory)/dev.tfvars -v -f'
