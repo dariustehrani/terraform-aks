@@ -110,18 +110,13 @@ ensure_terraform_backend() {
         read -p "Continue with terraform apply (y/n)? " CONT
         if [ "$CONT" = "y" ]; then
             terraform apply terraform.tfplan
+            BACKEND_CONFIG="$(terraform output -json | jq -r '.backend_config_params.value' | tr -d '\n')"
         else
             exit 1
         fi
     fi
-    BACKEND_CONFIG="$(terraform output -json | jq -r '.backend_config_params.value' | tr -d '\n')"
-    else    
-        if [ -z "${RT_VAR_FILE_PATH}" ]; then
-            eval $(printf "terraform validate %s" "${RT_VARS}")
-        else
-            eval $(printf "terraform validate -var-file %s %s" "${RT_VAR_FILE_PATH}" "${RT_VARS}")
-        fi
-    fi
+
+    # BACKEND_CONFIG="$(terraform output -json | jq -r '.backend_config_params.value' | tr -d '\n')"
 
     popd
 }
