@@ -15,19 +15,16 @@ steps:
   inputs:
     secureFile: 'dev.tfvars'
 
-- task: AzureCLI@1
-  inputs:
-    azureSubscription: 'aks-terraform'
-    scriptLocation: 'inlineScript'
-    inlineScript: 'pwd && ls -las'
 
 - task: AzureCLI@1
+  name: "azurecli_firewallextension"
   inputs:
     azureSubscription: 'aks-terraform'
     scriptLocation: 'inlineScript'
     inlineScript: 'az extension add -n azure-firewall'
 
 - task: AzureCLI@1
+  name: "terraform_DRYRUN"
   env:
     __TF_AAD_CLIENT_APP_ID: $(__TF_aad_client_app_id)
     __TF_AAD_TENAND_ID: $(__TF_aad_tenant_id)
@@ -40,9 +37,3 @@ steps:
     arguments: '-e dev -i $(Agent.TempDirectory)/dev.tfvars -v -f'
     addSpnToEnvironment: true
     workingDirectory: '$(System.DefaultWorkingDirectory)/'
-
-- task: AzureCLI@1
-  inputs:
-    azureSubscription: 'aks-terraform'
-    scriptLocation: 'inlineScript'
-    inlineScript: 'pwd && ls -las && echo "folder content" && ls -las 01-aks/'
