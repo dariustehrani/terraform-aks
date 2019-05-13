@@ -81,45 +81,8 @@ ensure_subription_context() {
     fi
 }
 
-BACKEND_CONFIG=""
-ensure_terraform_backend() {
-    RT_BACKEND=$1
-    RT_VAR_FILE_PATH=$2
-    RT_VARS=$(echo -n $(get_tf_variables))
-
-    pushd $DIR
-    cd $(echo -n "${DIR}/${RT_BACKEND}")
-
-    # Delete state, we are always re-creating the local state for the backend.
-    rm -f terraform.tfplan terraform.tfstate terraform.tfstate.backup
-    terraform init
-
-    if [ "${f}" = true ]; then
-        if [ -z "${RT_VAR_FILE_PATH}" ]; then
-            eval $(printf "terraform plan -out=terraform.tfplan %s" "${RT_VARS}") && terraform apply terraform.tfplan
-        else
-            eval $(printf "terraform plan -out=terraform.tfplan -var-file %s %s" "${RT_VAR_FILE_PATH}" "${RT_VARS}") && terraform apply terraform.tfplan
-        fi
-    else
-        if [ -z "${RT_VAR_FILE_PATH}" ]; then
-            eval $(printf "terraform plan -out=terraform.tfplan %s" "${RT_VARS}")
-        else
-            eval $(printf "terraform plan -out=terraform.tfplan -var-file %s %s" "${RT_VAR_FILE_PATH}" "${RT_VARS}")
-        fi
-
-        read -p "Continue with terraform apply (y/n)? " CONT
-        if [ "$CONT" = "y" ]; then
-            terraform apply terraform.tfplan
-            BACKEND_CONFIG="$(terraform output -json | jq -r '.backend_config_params.value' | tr -d '\n')"
-        else
-            exit 1
-        fi
-    fi
-
-    # BACKEND_CONFIG="$(terraform output -json | jq -r '.backend_config_params.value' | tr -d '\n')"
-
-    popd
-}
+export BACKEND_CONFIG="-backend-config 'resource_group_name=${__TF_resource_group_name}' -backend-config 'storage_account_name={__TF_storage_account_name}' -backend-config 'container_name=${__TF_storage_container_name}' -backend-config 'access_key=${__TF_storage_account_primary_access_key}'"
+echo ${BACKEND_CONFIG}
 
 run_terraform() {
     RT_VALIDATE_ONLY=$1
@@ -247,9 +210,6 @@ fi
 
 VAR_FILE_PATH=$(get_abs_filename "${i}")
 ensure_subription_context
-
-.log 6 "[==== 00 Ensure Terraform State Backend  ====]"
-ensure_terraform_backend "00-tf-backend" "${VAR_FILE_PATH}"
 
 .log 6 "[==== 01 AKS ====]"
 run_terraform ${v} ${e} "01-aks" "${VAR_FILE_PATH}"
