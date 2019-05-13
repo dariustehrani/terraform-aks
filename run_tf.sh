@@ -81,7 +81,7 @@ ensure_subription_context() {
     fi
 }
 
-export BACKEND_CONFIG="-backend-config 'resource_group_name=${__TF_RESOURCE_GROUP_NAME}' -backend-config 'storage_account_name={__TF_STORAGE_ACCOUNT_NAME}' -backend-config 'container_name=${__TF_STORAGE_CONTAINER_NAME}' -backend-config 'access_key=${__TF_STORAGE_ACCOUNT_PRIMARY_ACCESS_KEY}'"
+export BACKEND_CONFIG="-backend-config 'resource_group_name=${__TF_RESOURCE_GROUP_NAME}' -backend-config 'storage_account_name=${__TF_STORAGE_ACCOUNT_NAME}' -backend-config 'container_name=${__TF_STORAGE_CONTAINER_NAME}' -backend-config 'access_key=${__TF_STORAGE_ACCOUNT_PRIMARY_ACCESS_KEY}'"
 echo ${BACKEND_CONFIG}
 
 run_terraform() {
