@@ -33,3 +33,6 @@ steps:
     scriptLocation: 'scriptPath'
     scriptPath: 'tf_apply_all.1.sh'
     arguments: '-e dev -p 4711 -i $(Agent.TempDirectory)/dev.tfvars -v -f'
+    addSpnToEnvironment: true
+
+
