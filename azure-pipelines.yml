@@ -12,16 +12,22 @@ trigger:
 
 steps:
 - task: DownloadSecureFile@1
+  name: "downloading_dev_tfvars"
+  inputs:
+    secureFile: 'dev.tfvars'
+
+- task: DownloadSecureFile@1
+  name: "downloading_id_rsa_pub"
   inputs:
     secureFile: 'dev.tfvars'
 
 
 - task: AzureCLI@1
-  name: "azurecli_firewallextension"
+  name: "azurecli_prep"
   inputs:
     azureSubscription: 'aks-terraform'
     scriptLocation: 'inlineScript'
-    inlineScript: 'az extension add -n azure-firewall'
+    inlineScript: 'az extension add -n azure-firewall && cp $(Agent.TempDirectory)/id_rsa.pub ~/.ssh'
 
 - task: AzureCLI@1
   name: "terraform_DRYRUN"
