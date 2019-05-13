@@ -19,7 +19,7 @@ steps:
 - task: DownloadSecureFile@1
   name: "downloading_id_rsa_pub"
   inputs:
-    secureFile: 'dev.tfvars'
+    secureFile: 'id_rsa.pub'
 
 
 - task: AzureCLI@1
