@@ -24,15 +24,9 @@ steps:
 - task: AzureCLI@1
   inputs:
     azureSubscription: 'aks-terraform'
-    scriptLocation: 'inlineScript'
-    inlineScript: 'env'
-
-- task: AzureCLI@1
-  inputs:
-    azureSubscription: 'aks-terraform'
     scriptLocation: 'scriptPath'
-    scriptPath: 'tf_apply_all.1.sh'
-    arguments: '-e dev -p 4711 -i $(Agent.TempDirectory)/dev.tfvars -v -f'
+    scriptPath: 'run_tf.sh'
+    arguments: '-e dev -i $(Agent.TempDirectory)/dev.tfvars -v -f'
     addSpnToEnvironment: true
 
 
