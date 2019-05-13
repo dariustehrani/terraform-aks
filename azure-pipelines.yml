@@ -39,6 +39,7 @@ steps:
     scriptPath: 'run_tf.sh'
     arguments: '-e dev -i $(Agent.TempDirectory)/dev.tfvars -v -f'
     addSpnToEnvironment: true
+    workingDirectory: '$(System.DefaultWorkingDirectory)/'
 
 - task: AzureCLI@1
   inputs:
