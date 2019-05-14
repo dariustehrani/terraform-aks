@@ -1,0 +1,42 @@
+prefix = "contoso"
+
+location = "West Europe"
+
+location_log_analytics = "West Europe"
+
+aks_cluster_admins = ["datehran@microsoft.com", "isgrund@microsoft.com"]
+
+aks_kubernetes_version = "1.13.5"
+
+aks_vm_size = "Standard_DS2_v2"
+
+aks_vm_count = "3"
+
+aad_client_app_id = ""
+
+aad_tenant_id = ""
+
+public_ssh_key_path = "~/.ssh/id_rsa.pub"
+
+create_azure_container_registry = "false"
+
+# Specify only in case you need to use an existing Public IP with Azure Firewall.
+# external_pip_name = ""
+# external_pip_resource_group = "" 
+
+# Azure Kubernetes Cluster Service Principal 
+
+aks_sp = ""
+
+aks_sp_password = ""
+
+# RBAC / Azure Active Directory Service Principles
+# see https://docs.microsoft.com/de-de/azure/aks/azure-ad-integration-cli
+
+aks_aad_server_sp = ""
+
+aks_aad_server_pasword = ""
+
+aks_aad_client_sp = ""
+
+aks_aad_client_password = ""
