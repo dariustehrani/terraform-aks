@@ -1,10 +1,10 @@
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = "${local.prefix_snake}-aks"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
   location            = "${azurerm_resource_group.rg.location}"
   dns_prefix          = "${local.prefix_snake}"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
   kubernetes_version  = "${var.aks_kubernetes_version}"
-  depends_on          = ["azuread_application.aks_app", "azuread_application.aad_server"]
+
   linux_profile {
     admin_username = "azureuser"
 
@@ -27,30 +27,30 @@ resource "azurerm_kubernetes_cluster" "aks" {
     enabled = true
 
     azure_active_directory {
-      client_app_id = "${var.aad_client_app_id}"
-      
-      server_app_id     = "${azuread_application.aad_server.application_id}"
-      server_app_secret = "${local.aks_sp_password}"
+      client_app_id = "${var.aks_aad_client_sp}"
+
+      server_app_id     = "${var.aks_aad_server_sp}"
+      server_app_secret = "${var.aks_aad_server_pasword}"
 
       tenant_id = "${var.aad_tenant_id}"
     }
   }
 
   service_principal {
-    client_id     = "${azuread_application.aks_app.application_id}"
-    client_secret = "${local.aks_sp_password}"
+    client_id     = "${var.aks_sp}"
+    client_secret = "${var.aks_sp_password}"
   }
 
   network_profile {
-    network_plugin = "azure"
-    service_cidr = "${local.aks_service_cidr}"
+    network_plugin     = "azure"
+    service_cidr       = "${local.aks_service_cidr}"
     docker_bridge_cidr = "${local.docker_bridge_cidr}"
-    dns_service_ip = "${local.aks_dns_service_ip}"
+    dns_service_ip     = "${local.aks_dns_service_ip}"
   }
 
   addon_profile {
     oms_agent {
-      enabled = true
+      enabled                    = true
       log_analytics_workspace_id = "${azurerm_log_analytics_workspace.la_monitor_containers.id}"
     }
   }

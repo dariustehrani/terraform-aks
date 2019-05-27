@@ -1,22 +1,22 @@
 # # Locals block for hardcoded names. 
 locals {
-    backend_address_pool_name      = "${var.prefix_snake}-beap"
-    frontend_port_name             = "${var.prefix_snake}-feport"
-    frontend_ip_configuration_name = "${var.prefix_snake}-feip"
-    http_setting_name              = "${var.prefix_snake}-be-htst"
-    listener_name                  = "${var.prefix_snake}-httplstn"
-    request_routing_rule_name      = "${var.prefix_snake}-rqrt"
-    redirect_configuration_name    = "${var.prefix_snake}-rdrcfg"
-    app_gateway_subnet_name = "appgwsubnet"
+  backend_address_pool_name      = "${var.prefix_snake}-beap"
+  frontend_port_name             = "${var.prefix_snake}-feport"
+  frontend_ip_configuration_name = "${var.prefix_snake}-feip"
+  http_setting_name              = "${var.prefix_snake}-be-htst"
+  listener_name                  = "${var.prefix_snake}-httplstn"
+  request_routing_rule_name      = "${var.prefix_snake}-rqrt"
+  redirect_configuration_name    = "${var.prefix_snake}-rdrcfg"
+  app_gateway_subnet_name        = "appgwsubnet"
 }
 
- resource "azurerm_public_ip" "appgw_pip" {
+resource "azurerm_public_ip" "appgw_pip" {
   name                = "${var.prefix_snake}-appgw-pip"
   location            = "${var.resource_group_location}"
   resource_group_name = "${var.resource_group}"
   allocation_method   = "Static"
   sku                 = "Standard"
-  domain_name_label   = "${var.prefix_snake}-${var.workspace_random_id}" 
+  domain_name_label   = "${var.prefix_snake}-${var.workspace_random_id}"
 }
 
 # Subnet Calc: 10.0.10.0/24 -> IP Range: 10.0.10.1 - 10.0.10.254
@@ -25,7 +25,6 @@ resource "azurerm_subnet" "appgw_subnet_fe" {
   resource_group_name  = "${var.resource_group}"
   address_prefix       = "${var.appgw_subnet_cidr}"
   virtual_network_name = "${var.vnet_name}"
-
 }
 
 resource "azurerm_application_gateway" "appgw" {
@@ -61,7 +60,7 @@ resource "azurerm_application_gateway" "appgw" {
   backend_http_settings {
     name                  = "${local.http_setting_name}"
     cookie_based_affinity = "Disabled"
-    path         = "/"
+    path                  = "/"
     port                  = 80
     protocol              = "Http"
     request_timeout       = 1
@@ -75,10 +74,10 @@ resource "azurerm_application_gateway" "appgw" {
   }
 
   request_routing_rule {
-    name                        = "${local.request_routing_rule_name}"
-    rule_type                   = "Basic"
-    http_listener_name          = "${local.listener_name}"
-    backend_address_pool_name   = "${local.backend_address_pool_name}"
-    backend_http_settings_name  = "${local.http_setting_name}"
+    name                       = "${local.request_routing_rule_name}"
+    rule_type                  = "Basic"
+    http_listener_name         = "${local.listener_name}"
+    backend_address_pool_name  = "${local.backend_address_pool_name}"
+    backend_http_settings_name = "${local.http_setting_name}"
   }
 }

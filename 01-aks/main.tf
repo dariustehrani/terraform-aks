@@ -1,7 +1,7 @@
 locals {
   prefix_snake = "${terraform.workspace}-${var.prefix}"
-  prefix_flat = "${terraform.workspace}${var.prefix}"
-  location = "${lower(replace(var.location, " ", ""))}"
+  prefix_flat  = "${terraform.workspace}${var.prefix}"
+  location     = "${lower(replace(var.location, " ", ""))}"
 
   # vnet           10.0.0.0/16 -> IP Range: 10.0.0.1 - 10.0.255.254
   # aks            10.0.0.0/20 -> IP Range: 10.0.0.1 - 10.0.15.254
@@ -9,12 +9,13 @@ locals {
   # docker bridge  172.17.0.1/16
   # firewall       10.0.240.0/24 -> IP Range: 10.0.240.1 - 10.0.240.254
   # app gw         10.0.242.0/24 -> IP Range: 10.0.242.1 - 10.0.242.254
-  vnet_cidr              = "10.0.0.0/16"
-  aks_subnet_cidr        = "10.0.0.0/20"
-  aks_service_cidr       = "10.1.0.0/20"
-  aks_dns_service_ip     = "10.1.0.10"
-  docker_bridge_cidr     = "172.17.0.1/16"
-  firewall_subnet_cidr   = "10.0.240.0/24"
+  vnet_cidr = "10.0.0.0/16"
+
+  aks_subnet_cidr      = "10.0.0.0/20"
+  aks_service_cidr     = "10.1.0.0/20"
+  aks_dns_service_ip   = "10.1.0.10"
+  docker_bridge_cidr   = "172.17.0.1/16"
+  firewall_subnet_cidr = "10.0.240.0/24"
 }
 
 resource "random_id" "workspace" {
@@ -36,7 +37,6 @@ resource "azurerm_virtual_network" "vnet" {
   location            = "${azurerm_resource_group.rg.location}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   address_space       = ["${local.vnet_cidr}"]
-
 }
 
 resource "azurerm_subnet" "aks_subnet" {

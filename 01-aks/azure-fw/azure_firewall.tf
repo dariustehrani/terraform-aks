@@ -1,7 +1,8 @@
 locals {
-  external_pip_id = "${data.azurerm_subscription.current.id}/resourceGroups/${var.external_pip_resource_group}/providers/Microsoft.Network/publicIPAddresses/${var.external_pip_name}"
+  external_pip_id  = "${data.azurerm_subscription.current.id}/resourceGroups/${var.external_pip_resource_group}/providers/Microsoft.Network/publicIPAddresses/${var.external_pip_name}"
   generated_pip_id = "${data.azurerm_subscription.current.id}/resourceGroups/${var.resource_group}/providers/Microsoft.Network/publicIPAddresses/${terraform.workspace}-${var.prefix}-firewall-pip"
 }
+
 data "azurerm_subscription" "current" {}
 
 resource "azurerm_public_ip" "firewall_pip" {
@@ -11,7 +12,7 @@ resource "azurerm_public_ip" "firewall_pip" {
   resource_group_name = "${var.resource_group}"
   allocation_method   = "Static"
   sku                 = "Standard"
-  domain_name_label   = "${var.prefix_snake}-${var.workspace_random_id}" 
+  domain_name_label   = "${var.prefix_snake}-${var.workspace_random_id}"
 }
 
 # Subnet Calc: 10.0.10.0/24 -> IP Range: 10.0.10.1 - 10.0.10.254
@@ -20,9 +21,7 @@ resource "azurerm_subnet" "firewall_subnet" {
   resource_group_name  = "${var.resource_group}"
   address_prefix       = "${var.firewall_subnet_cidr}"
   virtual_network_name = "${var.vnet_name}"
-
 }
-
 
 resource "azurerm_firewall" "firewall" {
   name                = "${var.prefix_snake}-firewall"
@@ -34,7 +33,8 @@ resource "azurerm_firewall" "firewall" {
     subnet_id            = "${azurerm_subnet.firewall_subnet.id}"
     public_ip_address_id = "${var.external_pip_name == "" ? local.generated_pip_id : local.external_pip_id}"
   }
-  depends_on             = ["azurerm_public_ip.firewall_pip"]
+
+  depends_on = ["azurerm_public_ip.firewall_pip"]
 }
 
 resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
@@ -72,7 +72,7 @@ resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
       "security.ubuntu.com",
       "storage.googleapis.com",
       "quay.io",
-      "d3uo42mtx6z2cr.cloudfront.net"
+      "d3uo42mtx6z2cr.cloudfront.net",
     ]
 
     protocol {
@@ -89,7 +89,7 @@ resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
     target_fqdns = [
       "azure.archive.ubuntu.com",
       "download.opensuse.org",
-      "security.ubuntu.com"
+      "security.ubuntu.com",
     ]
 
     protocol {
@@ -113,18 +113,18 @@ resource "azurerm_firewall_network_rule_collection" "egress_rules_network" {
     source_addresses = ["*"]
 
     destination_ports = [
-      "123"
+      "123",
     ]
 
     destination_addresses = [
       "91.189.89.199",
       "91.189.89.198",
       "91.189.94.4",
-      "91.189.91.157"
+      "91.189.91.157",
     ]
 
     protocols = [
-      "UDP"
+      "UDP",
     ]
   }
 
@@ -136,15 +136,15 @@ resource "azurerm_firewall_network_rule_collection" "egress_rules_network" {
 
     destination_ports = [
       "22",
-      "443"
+      "443",
     ]
 
     destination_addresses = [
-      "*"
+      "*",
     ]
 
     protocols = [
-      "TCP"
+      "TCP",
     ]
   }
 }
@@ -157,40 +157,41 @@ data "azurerm_public_ip" "firewall_data_pip" {
 # Route Table: AKS Subnet -> Azure Firewall
 
 resource "azurerm_route" "aks_next_hop_fw" {
-  name                = "${var.prefix_snake}-default-route"
-  resource_group_name = "${var.resource_group}"
-  route_table_name    = "${var.prefix_snake}-aks-rt"
-  address_prefix      = "0.0.0.0/0"
-  next_hop_type       = "VirtualAppliance"
+  name                   = "${var.prefix_snake}-default-route"
+  resource_group_name    = "${var.resource_group}"
+  route_table_name       = "${var.prefix_snake}-aks-rt"
+  address_prefix         = "0.0.0.0/0"
+  next_hop_type          = "VirtualAppliance"
   next_hop_in_ip_address = "${azurerm_firewall.firewall.ip_configuration.0.private_ip_address}"
 }
 
-
 resource "azurerm_monitor_diagnostic_setting" "firewall_diagnostics" {
-  name               = "firewall_diagnostics"
-  target_resource_id = "${azurerm_firewall.firewall.id}"
+  name                       = "firewall_diagnostics"
+  target_resource_id         = "${azurerm_firewall.firewall.id}"
   log_analytics_workspace_id = "${var.la_monitor_containers_workspace_id}"
 
   log {
     category = "AzureFirewallApplicationRule"
     enabled  = true
+
     retention_policy {
-        enabled = false
+      enabled = false
     }
   }
 
   log {
     category = "AzureFirewallNetworkRule"
     enabled  = true
+
     retention_policy {
-        enabled = false
+      enabled = false
     }
   }
 
   metric {
     category = "AllMetrics"
-    enabled = false
-    
+    enabled  = false
+
     retention_policy {
       enabled = false
     }
