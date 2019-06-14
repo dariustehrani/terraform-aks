@@ -30,14 +30,14 @@ steps:
 - task: AzureCLI@1
   name: "azurecli_prep"
   inputs:
-    azureSubscription: 'aks-terraform'
+    azureSubscription: 'aks4711'
     scriptLocation: 'inlineScript'
     inlineScript: 'az extension add -n azure-firewall && mkdir ~/.ssh/ && cp $(Agent.TempDirectory)/id_rsa.pub ~/.ssh/'
 
 - task: AzureCLI@1
   name: "azurecli_kubeconfig"
   inputs:
-    azureSubscription: 'aks-terraform'
+    azureSubscription: 'aks4711'
     scriptLocation: 'inlineScript'
     inlineScript: 'az aks get-credentials --resource-group dev-${__TF_PREFIX}-aks-rg --name dev-${__TF_PREFIX}-aks --admin --overwrite-existing'
 
@@ -48,7 +48,7 @@ steps:
     __TF_AAD_TENANT_ID: $(__TF_aad_tenant_id)
     __TF_STORAGE_ACCOUNT_PRIMARY_ACCESS_KEY: $(__TF_storage_account_primary_access_key)
   inputs:
-    azureSubscription: 'aks-terraform'
+    azureSubscription: 'aks4711'
     scriptLocation: 'scriptPath'
     scriptPath: 'run_tf.sh'
     arguments: '-e dev -i $(Agent.TempDirectory)/dev.tfvars -v -f'
@@ -62,7 +62,7 @@ steps:
     __TF_AAD_TENANT_ID: $(__TF_aad_tenant_id)
     __TF_STORAGE_ACCOUNT_PRIMARY_ACCESS_KEY: $(__TF_storage_account_primary_access_key)
   inputs:
-    azureSubscription: 'aks-terraform'
+    azureSubscription: 'aks4711'
     scriptLocation: 'scriptPath'
     scriptPath: 'run_tf.sh'
     arguments: '-e dev -i $(Agent.TempDirectory)/dev.tfvars -f'
