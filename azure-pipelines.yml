@@ -34,12 +34,12 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: 'az extension add -n azure-firewall && mkdir ~/.ssh/ && cp $(Agent.TempDirectory)/id_rsa.pub ~/.ssh/'
 
-- task: AzureCLI@1
-  name: "azurecli_kubeconfig"
-  inputs:
-    azureSubscription: 'aks4711'
-    scriptLocation: 'inlineScript'
-    inlineScript: 'az aks get-credentials --resource-group dev-${__TF_PREFIX}-aks-rg --name dev-${__TF_PREFIX}-aks --admin --overwrite-existing'
+# - task: AzureCLI@1
+#   name: "azurecli_kubeconfig"
+#   inputs:
+#     azureSubscription: 'aks4711'
+#     scriptLocation: 'inlineScript'
+#     inlineScript: 'az aks get-credentials --resource-group dev-${__TF_PREFIX}-aks-rg --name dev-${__TF_PREFIX}-aks --admin --overwrite-existing'
 
 - task: AzureCLI@1
   name: "terraform_DRYRUN"
